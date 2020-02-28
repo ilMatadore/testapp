@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { Switch, Route, withRouter } from 'react-router-dom';
+
 import SignIn from './components/SignIn/SignIn';
 import Pricing from './components/Pricing/pricing';
 import Register from './components/Register/Register';
@@ -12,6 +13,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      first_name: '',
+      last_name: '',
       email: '',
       password: '',
       isSignedIn: false
@@ -37,9 +40,7 @@ class App extends React.Component {
     .then(data => {
       if (data === 'Success!') {
         this.setState({isSignedIn: true})
-        this.props.history.push('/pricing');
-        console.log(this.state)
-        
+        this.props.history.push('/pricing');        
       }
     })
   };
@@ -49,7 +50,29 @@ class App extends React.Component {
       this.props.history.push('/')
   }
 
-  
+  handleRegister = () => {  
+
+    fetch('http://localhost:3000/register', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        email: this.state.email,
+        password: this.state.password
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data === 'Success!') {
+        this.setState({isSignedIn: true})
+        this.props.history.push('/pricing');
+      }
+    })
+    
+  };
+
+ 
   render() {
     console.log(this.state)
     return (
@@ -57,7 +80,7 @@ class App extends React.Component {
         <Bar isSignedIn={this.state.isSignedIn} handleLogout={this.handleLogout}/>
         <Switch>
           <Route exact path='/' render={(props) => <SignIn {...props} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />} />
-          <Route exact path='/register' component={Register} />
+          <Route exact path='/register' render={(props) => <Register {...props} handleChange={this.handleChange} handleSubmit={this.handleRegister} />}  />
           <Route exact path='/pricing' component={Pricing}/>
           <Route exact path='/checkout' component={Checkout} />
         </Switch>        

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -32,40 +32,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Register(props) {
+function Register({handleChange, handleSubmit}) {
   const classes = useStyles();
 
-  const [userCredentials, setCredentials ] = useState({ first_name: '', last_name: '', email: '', password: '' });
-
-  const handleSubmit = async event => {
-    event.preventDefault();
-    const { first_name, last_name, email, password } = userCredentials;
-
-    fetch('http://localhost:3000/register', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        first_name: first_name,
-        last_name: last_name,
-        email: email,
-        password: password
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data === 'Success!') {
-        props.history.push('/pricing');
-      }
-    })
-    
-  };
-
-  const handleChange = event => {
-    const { value, name } = event.target;
-
-    setCredentials({...userCredentials, [name]: value })
-
-  }
+  
 
   return (
     <Container component="main" maxWidth="xs">
@@ -77,7 +47,7 @@ export default function Register(props) {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <div className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField onChange={handleChange}
@@ -148,8 +118,10 @@ export default function Register(props) {
               </Link>
             </Grid>
           </Grid>
-        </form>
+        </div>
       </div>
     </Container>
   );
 }
+
+export default Register;

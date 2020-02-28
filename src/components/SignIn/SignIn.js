@@ -10,6 +10,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { signInWithGoogle } from '../../firebase/firebase.utils';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -102,6 +104,22 @@ const useStyles = makeStyles(theme => ({
                 </Link>
               </Grid>
             </Grid>
+            <Grid container>
+              <Grid item xs>
+              <Typography className={classes.paper} component="h1" variant="body2">
+            OR
+          </Typography>
+              </Grid>
+            </Grid>
+            <Button onClick={signInWithGoogle}
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              className={classes.submit}
+            >
+              Sign In with Google
+            </Button>
           </div>
         </div>
       </Grid>
