@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -44,8 +42,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
- const SignInSide = () => {
+ const SignIn = ({handleChange, handleSubmit, ...otherProps}) => {  
   const classes = useStyles();
+  console.log({...otherProps})
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -60,7 +59,7 @@ const useStyles = makeStyles(theme => ({
             Sign in
           </Typography>
           <div className={classes.form} noValidate>
-            <TextField
+            <TextField onChange={handleChange}
               variant="outlined"
               margin="normal"
               required
@@ -71,7 +70,7 @@ const useStyles = makeStyles(theme => ({
               autoComplete="email"
               autoFocus
             />
-            <TextField
+            <TextField onChange={handleChange}
               variant="outlined"
               margin="normal"
               required
@@ -82,11 +81,7 @@ const useStyles = makeStyles(theme => ({
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
+            <Button onClick={handleSubmit}
               type="submit"
               fullWidth
               variant="contained"
@@ -113,4 +108,4 @@ const useStyles = makeStyles(theme => ({
     </Grid>
   );
 }
-export default SignInSide;
+export default SignIn;

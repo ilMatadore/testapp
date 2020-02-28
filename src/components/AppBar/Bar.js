@@ -51,14 +51,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Bar() {
-  const classes = useStyles();
+function Bar(props) {
+  console.log(props)
 
+  
+  const classes = useStyles();
     return (
       <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-          Company name
+          Eureka
         </Typography>
         <nav>
           <Link variant="button" color="textPrimary" href="#" className={classes.link}>
@@ -71,8 +73,8 @@ function Bar() {
             Support
           </Link>
         </nav>
-        <Button href="#" color="primary" variant="outlined" className={classes.link}>
-          Login
+        <Button href="#" color="primary" variant="outlined" className={classes.link} onClick={props.handleLogout}>
+          {props.isSignedIn === false ? 'Login' : 'Logout'}
         </Button>
       </Toolbar>
     </AppBar>
