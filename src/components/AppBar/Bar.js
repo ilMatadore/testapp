@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
+//import { auth } from '../../firebase/firebase.utils';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -51,9 +52,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Bar(props) {
-  console.log(props)
-
+function Bar({ currentUser, handleLogout }) {
   
   const classes = useStyles();
     return (
@@ -64,17 +63,14 @@ function Bar(props) {
         </Typography>
         <nav>
           <Link variant="button" color="textPrimary" href="#" className={classes.link}>
-            Features
-          </Link>
-          <Link variant="button" color="textPrimary" href="#" className={classes.link}>
             Enterprise
           </Link>
           <Link variant="button" color="textPrimary" href="#" className={classes.link}>
             Support
           </Link>
         </nav>
-        <Button href="#" color="primary" variant="outlined" className={classes.link} onClick={props.handleLogout}>
-          {props.isSignedIn === false ? 'Login' : 'Logout'}
+        <Button  color="primary" variant="outlined" className={classes.link} onClick={handleLogout}>
+          {currentUser  ? 'Logout' : 'Login'}
         </Button>
       </Toolbar>
     </AppBar>

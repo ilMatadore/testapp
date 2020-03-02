@@ -46,8 +46,7 @@ const useStyles = makeStyles(theme => ({
 
  const SignIn = ({handleChange, handleSubmit, ...otherProps}) => {  
   const classes = useStyles();
-  console.log({...otherProps})
-
+ 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -104,12 +103,7 @@ const useStyles = makeStyles(theme => ({
                 </Link>
               </Grid>
             </Grid>
-            <Grid container>
-              <Grid item xs>
-              <Typography className={classes.paper} component="h1" variant="body2">
-            OR
-          </Typography>
-              </Grid>
+            <Grid item xs className={classes.paper}>
             </Grid>
             <Button onClick={signInWithGoogle}
               type="submit"

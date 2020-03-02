@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
 import { Switch, Route, withRouter } from 'react-router-dom';
-
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+ 
 import SignIn from './components/SignIn/SignIn';
 import Pricing from './components/Pricing/pricing';
 import Register from './components/Register/Register';
@@ -17,10 +18,37 @@ class App extends React.Component {
       last_name: '',
       email: '',
       password: '',
-      isSignedIn: false
+      currentUser: null
     }
   }
-  
+
+  unsubscribeFromAuth = null;
+
+  componentDidMount() {
+   this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          })
+        });
+        this.props.history.push('/pricing')
+      } else {
+        this.setState({ currentUser: userAuth })
+        this.props.history.push('/')
+      }  
+    })
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+
   handleChange = event => {
     const { name, value } = event.target
     this.setState({[name]: value})
@@ -39,16 +67,17 @@ class App extends React.Component {
     .then(response => response.json())
     .then(data => {
       if (data === 'Success!') {
-        this.setState({isSignedIn: true})
+        this.setState({ currentUser: !null })
         this.props.history.push('/pricing');        
       }
     })
   };
 
   handleLogout = () => {
-      this.setState({isSignedIn: false})
-      this.props.history.push('/')
-  }
+    auth.signOut();
+    this.setState({ currentUser: null })
+    this.props.history.push('/')
+}
 
   handleRegister = () => {  
 
@@ -65,7 +94,6 @@ class App extends React.Component {
     .then(response => response.json())
     .then(data => {
       if (data === 'Success!') {
-        this.setState({isSignedIn: true})
         this.props.history.push('/pricing');
       }
     })
@@ -74,10 +102,9 @@ class App extends React.Component {
 
  
   render() {
-    console.log(this.state)
     return (
       <div>
-        <Bar isSignedIn={this.state.isSignedIn} handleLogout={this.handleLogout}/>
+        <Bar currentUser={this.state.currentUser} handleLogout={this.handleLogout}/>
         <Switch>
           <Route exact path='/' render={(props) => <SignIn {...props} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />} />
           <Route exact path='/register' render={(props) => <Register {...props} handleChange={this.handleChange} handleSubmit={this.handleRegister} />}  />
